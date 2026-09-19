@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Engineering — Día 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<link rel="stylesheet" href="presentacion.css">
+</head>
+<body>
+
+<div class="brand-mini">#AI Engineer Challenge · Día 2</div>
+
+<div class="toolbar">
+  <button id="bTema" type="button" aria-pressed="false" title="Cambiar tema claro/oscuro">☾ Tema</button>
+  <button id="bMenos" type="button" title="Reducir tamaño de letra">A−</button>
+  <button id="bMas" type="button" title="Aumentar tamaño de letra">A+</button>
+  <button id="bMarcas" type="button" aria-expanded="false" title="Ver referencias">★ Fuentes</button>
+</div>
+
+<aside class="refs-panel" id="refsPanel">
+  <button class="close" id="refsClose" type="button">✕ Cerrar</button>
+  <h3>Fuentes citadas en esta sesión</h3>
+  <ul>
+    <li><a href="https://docs.pydantic.dev/" target="_blank" rel="noopener">Documentación de Pydantic</a></li>
+    <li><a href="https://api-docs.deepseek.com/" target="_blank" rel="noopener">Documentación de la API de DeepSeek</a></li>
+    <li><a href="https://docs.github.com/en/rest/issues/issues" target="_blank" rel="noopener">GitHub REST API — Issues</a></li>
+    <li><a href="https://docs.github.com/en/graphql" target="_blank" rel="noopener">GitHub GraphQL API (Projects v2)</a></li>
+    <li><a href="https://langchain-ai.github.io/langgraph/" target="_blank" rel="noopener">LangGraph — routing de agentes</a></li>
+    <li><a href="https://mermaid.js.org/" target="_blank" rel="noopener">Mermaid — diagramas como código</a></li>
+    <li><a href="https://github.com/manuelarguelles/ai-engineer-challenge-dia2" target="_blank" rel="noopener">Repo del taller — notebook y slides de Día 2</a></li>
+  </ul>
+</aside>
+
+<div class="deck" id="deck">
+
+  <!-- 1. Título -->
+  <section class="slide active">
+    <div class="inner">
+      <div class="eyebrow">18 · Sep · 2026</div>
+      <h1>De clasificar a <span class="grad">actuar</span></h1>
+      <p class="lead">Ayer le enseñamos a la IA a entender un incidente con un contrato explícito. Hoy le damos información propia y herramientas para que ejecute algo real — hasta un primer prototipo funcionando en vivo.</p>
+      <p class="anchor">"El modelo interpreta. La aplicación autoriza."</p>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Apertura</span></footer>
+  </section>
+
+  <!-- 2. Quién dicta -->
+  <section class="slide">
+    <div class="inner with-qr">
+      <div>
+        <div class="eyebrow">Dicta hoy</div>
+        <h2>Construyo sistemas de IA para producción, no demos frágiles</h2>
+        <span class="role-pill">Manuel Argüelles · AI Engineer</span>
+        <p class="lead" style="margin-top:18px;">Construyo agentes y sistemas de IA que van a producción — no demos que se rompen apenas alguien pregunta algo raro.</p>
+        <p class="lead">Cualquier duda o proyecto propio, después de la sesión me escriben por acá 👉</p>
+      </div>
+      <div class="qr-card">
+        <img src="qr-linkedin.png" alt="QR LinkedIn Manuel Argüelles">
+        <div class="cap">linkedin.com/in/manuel-arguelles-ia</div>
+        <div class="cap" style="margin-top:6px;">github.com/manuelarguelles/ai-engineer-challenge-dia2</div>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Instructor</span></footer>
+  </section>
+
+  <!-- 3. Qué es AI Engineering -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Antes de arrancar</div>
+      <h2>AI Engineering es construir el sistema, no perfeccionar el prompt</h2>
+      <p class="lead" style="font-size:18px;max-width:70ch;">No es escribirle bonito a un modelo. Es la disciplina de construir un <b style="color:var(--ink)">sistema de software confiable alrededor de un modelo</b> — contratos, validación, políticas y observabilidad — para que una herramienta creativa pero probabilística se comporte de forma predecible dentro de un producto real.</p>
+      <ul class="pts" style="margin-top:32px;">
+        <li>El modelo <b>interpreta</b> lenguaje natural y propone.</li>
+        <li>La <b>capa de aplicación</b> — el código que ustedes escriben — decide qué se ejecuta.</li>
+        <li>Esa separación es todo lo que vimos ayer, y es la base de todo lo de hoy.</li>
+      </ul>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Fundamentos</span></footer>
+  </section>
+
+  <!-- 3b. De dónde viene un AI Engineer -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Antes de arrancar</div>
+      <h2>Todo AI Engineer viene de un rol de datos o software previo</h2>
+      <p class="lead" style="max-width:70ch;">No es un rol que nace de cero: en la práctica, casi siempre es la evolución de un rol de datos o de software que ya existía. Cada uno trae una pieza distinta del stack que están viendo estos dos días.</p>
+      <div class="grid3">
+        <div class="card">
+          <span class="num">Data Analyst / Data Scientist</span>
+          <h3>Traen la cultura de medir</h3>
+          <p>Manejo de datos, evaluación con métricas, no confiar en una respuesta "que suena bien".</p>
+          <div class="why"><b>Se ve en:</b>&nbsp;el golden dataset y la tasa de acierto que corrimos hoy.</div>
+        </div>
+        <div class="card">
+          <span class="num">Backend / Software Engineer</span>
+          <h3>Traen arquitectura</h3>
+          <p>Diseño de APIs, testing, separar responsabilidades en capas.</p>
+          <div class="why"><b>Se ve en:</b>&nbsp;encapsular la llamada al modelo en <code class="tag">analizar_incidente()</code>.</div>
+        </div>
+        <div class="card">
+          <span class="num">QA / Automation Engineer</span>
+          <h3>Traen pensar en lo que rompe</h3>
+          <p>Diseñar casos límite, no solo el camino feliz.</p>
+          <div class="why"><b>Se ve en:</b>&nbsp;el caso de prompt injection y los casos ambiguos de ayer.</div>
+        </div>
+        <div class="card">
+          <span class="num">DevOps / Platform Engineer</span>
+          <h3>Traen operar en producción</h3>
+          <p>Observabilidad, gestión de secrets, tokens con el mínimo permiso necesario.</p>
+          <div class="why"><b>Se ve en:</b>&nbsp;Colab Secrets y el <code class="tag">GITHUB_TOKEN</code> de hoy.</div>
+        </div>
+        <div class="card">
+          <span class="num">Product / Business Analyst</span>
+          <h3>Traen las reglas del negocio</h3>
+          <p>Traducir criterios de negocio ambiguos en reglas explícitas y verificables.</p>
+          <div class="why"><b>Se ve en:</b>&nbsp;la política de prioridad (alta/media/baja) y qué cuenta como crítico.</div>
+        </div>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Fundamentos</span></footer>
+  </section>
+
+  <!-- 4. Recap día 1 (1/2) -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Recap · Día 1 — "Haz que la IA entienda" (1/2)</div>
+      <h2>Ayer armaron un contrato, no solo un prompt</h2>
+      <div class="grid3">
+        <div class="card">
+          <span class="num">01</span>
+          <h3>Contexto explícito</h3>
+          <p>Instrucciones, política de negocio y restricciones dadas al modelo <i>antes</i> de la llamada — incluyendo tratar el input como dato no confiable.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;sin esto el modelo responde con conocimiento general, no con las reglas reales del negocio.</div>
+        </div>
+        <div class="card">
+          <span class="num">02</span>
+          <h3>Salida estructurada</h3>
+          <p>Un contrato Pydantic (<code class="tag">AnalisisIncidente</code>) que convierte texto libre en un objeto tipado y validado.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;una respuesta "convincente" en texto no es un contrato de software.</div>
+        </div>
+        <div class="card">
+          <span class="num">03</span>
+          <h3>Encapsulamiento</h3>
+          <p>La llamada al modelo vive dentro de una función (<code class="tag">analizar_incidente()</code>), aislada del resto de la app.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;permite cambiar de proveedor sin tocar nada más — hoy lo van a comprobar.</div>
+        </div>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Recap Día 1</span></footer>
+  </section>
+
+  <!-- 4b. Qué es Pydantic -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Profundizando · Salida estructurada</div>
+      <h2>Pydantic no es la única opción<a class="mk" href="https://docs.pydantic.dev/" target="_blank" rel="noopener" title="Documentación de Pydantic">★</a></h2>
+      <p class="lead" style="max-width:70ch;"><b style="color:var(--ink)">Pydantic</b> es una librería de Python: define la forma de un dato como una clase (<code class="tag">BaseModel</code>) y la valida automáticamente en tiempo de ejecución — si algo no cumple el tipo o la regla, se corta ahí con un error, no sigue de largo. Además genera un JSON Schema a partir de esa clase, que es exactamente lo que consumen las APIs de OpenAI y DeepSeek para forzar la salida estructurada.</p>
+      <ul class="pts" style="margin-top:26px;">
+        <li><b>dataclasses</b> (de la librería estándar) — liviano, pero sin validación automática: hay que escribirla a mano.</li>
+        <li><b>attrs + cattrs</b> — separa la definición de la clase (attrs) de la serialización/validación (cattrs).</li>
+        <li><b>marshmallow</b> — pensado para serializar/deserializar APIs REST; el schema se define aparte de la clase.</li>
+        <li><b>TypedDict</b> — solo tipado para el editor/mypy, <b>cero</b> validación real en ejecución.</li>
+        <li><b>jsonschema</b> — validar a mano contra un JSON Schema escrito directo, sin clases de Python.</li>
+        <li><b>Zod</b> — si trabajan en JavaScript/TypeScript, es el equivalente casi 1:1 de Pydantic.</li>
+      </ul>
+      <div class="flagbox" style="border-color:var(--accent-2);background:var(--accent-soft);">
+        <span class="dot" style="background:var(--accent-2);"></span>
+        <p><b style="color:var(--accent-2);">Por qué Pydantic ganó terreno en LLMs:</b>&nbsp;genera el JSON Schema automáticamente, y es el estándar de facto en frameworks como LangChain, LlamaIndex, Instructor y PydanticAI. No es la única forma de validar datos — es la que mejor conecta con las APIs de modelos de hoy.</p>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Recap Día 1</span></footer>
+  </section>
+
+  <!-- 5. Recap día 1 (2/2) -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Recap · Día 1 — "Haz que la IA entienda" (2/2)</div>
+      <h2>Las reglas que hacen que confíen en la salida</h2>
+      <div class="grid3">
+        <div class="card">
+          <span class="num">04</span>
+          <h3>Observabilidad</h3>
+          <p>Tokens de entrada/salida y latencia registrados en cada llamada, junto con la versión de modelo usada.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;sin esto es imposible depurar ni comparar modelos cuando algo falla.</div>
+        </div>
+        <div class="card">
+          <span class="num">05</span>
+          <h3>Políticas deterministas</h3>
+          <p>Reglas de código (<code class="tag">if</code>/<code class="tag">else</code>) sobre el resultado, no el modelo decidiendo solo.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;la autorización real nunca depende únicamente de una salida probabilística.</div>
+        </div>
+        <div class="card">
+          <span class="num">06</span>
+          <h3>Abstención / HITL</h3>
+          <p>Un valor válido de "no tengo evidencia suficiente" (<code class="tag">no_determinada</code>) en vez de forzar siempre una respuesta.</p>
+          <div class="why"><b>Por qué importa:</b>&nbsp;evita que el modelo finja certeza — peligroso en sistemas críticos.</div>
+        </div>
+      </div>
+      <div class="flagbox">
+        <span class="dot"></span>
+        <p><b>Quedó pendiente:</b> el dataset de casos de prueba que armaron ayer para evals deterministas no llegó a correrse por tiempo, y no llegaron al puente entre clasificación y acción. Hoy arrancamos justo ahí.</p>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Recap Día 1</span></footer>
+  </section>
+
+  <!-- 5b. if/else vs Router -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Profundizando · Políticas deterministas</div>
+      <h2>if/else no es la única forma de decidir<a class="mk" href="https://langchain-ai.github.io/langgraph/" target="_blank" rel="noopener" title="LangGraph — routing de agentes">★</a></h2>
+      <p class="lead" style="max-width:70ch;">La política que vimos (<code class="tag">if categoria == "SEGURIDAD"...</code>) es perfecta para 2 o 3 reglas simples y explícitas. El problema aparece cuando el negocio agrega la regla número 15: un árbol de <code class="tag">if/else</code> anidados se vuelve difícil de leer, de testear y de auditar.</p>
+      <div class="grid2">
+        <div class="card">
+          <h3>if / else</h3>
+          <p>Reglas de código, explícitas, leíbles de arriba a abajo. Cada regla nueva es una rama más en el mismo árbol.</p>
+          <div class="why"><b>Usalo cuando:</b>&nbsp;tenés pocas reglas (2-5), estables, y todo el equipo las puede leer en una pantalla.</div>
+        </div>
+        <div class="card">
+          <h3>Router</h3>
+          <p>Un componente único —una tabla de reglas, un clasificador, a veces otro LLM chico— decide a qué handler mandar cada caso. Cada handler se prueba por separado.</p>
+          <div class="why"><b>Usalo cuando:</b>&nbsp;las reglas son muchas, cambian seguido, o vienen directo del negocio (ej. LangGraph, Semantic Router).</div>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:22px;">No es una migración obligatoria: es una señal a vigilar. El día que el <code class="tag">if/else</code> deja de entrar en una pantalla, es momento de pensar en un router.</p>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Recap Día 1</span></footer>
+  </section>
+
+  <!-- 5c. Recap visual de Día 1 -->
+  <section class="slide">
+    <div class="inner" style="max-width:1080px;">
+      <div class="eyebrow">Recap · Día 1 en una sola imagen</div>
+      <h2>El contrato de ayer es un solo flujo, no piezas sueltas<a class="mk" href="https://mermaid.js.org/" target="_blank" rel="noopener" title="Mermaid — diagramas como código">★</a></h2>
+      <p class="lead" style="margin-bottom:0;">El contrato, la validación y la política determinista no son piezas sueltas — es un único flujo:</p>
+      <pre class="mermaid">
+flowchart LR
+    subgraph NB["Notebook Día 1"]
+    direction LR
+    A["Incidente<br/>(no confiable)"] --> B["Contexto<br/>instrucciones + política"]
+    B --> C["Llamada encapsulada<br/>analizar_incidente()"]
+    C --> D["Pydantic valida<br/>AnalisisIncidente"]
+    D --> E{"if / else"}
+    E -->|"determinada"| F["Autorizado"]
+    E -->|"sensible"| G["Revisión<br/>humana"]
+    end
+      </pre>
+      <p class="lead" style="margin-top:4px;">Pydantic "envuelve" el paso C→D: convierte lo que devuelve el modelo en un objeto confiable antes de la política determinista.</p>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Recap Día 1</span></footer>
+  </section>
+
+  <!-- 6. Hoy -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Hoy · "Haz que la IA actúe"</div>
+      <h2>De la clasificación a la acción</h2>
+      <ul class="pts">
+        <li>Cómo conectar <b>información propia real</b>: una base de datos, no solo texto fijo en el prompt.</li>
+        <li>Cómo conectarle una <b>herramienta concreta</b> (function calling) para que pase de "contestar" a "hacer".</li>
+        <li>Cómo armar, paso a paso y en vivo, un <b>primer prototipo funcional</b> sobre el mismo caso del incidente.</li>
+        <li>Qué controles poner para confiar en lo que ejecuta: <b>cuándo automatizar y cuándo dejar un humano en el medio</b>.</li>
+      </ul>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Hoy</span></footer>
+  </section>
+
+  <!-- 7. Nota técnica DeepSeek -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Nota técnica</div>
+      <h2>Hoy cambiamos de proveedor: DeepSeek<a class="mk" href="https://api-docs.deepseek.com/" target="_blank" rel="noopener" title="Documentación de la API de DeepSeek">★</a></h2>
+      <p class="lead">Ayer usamos OpenAI. Hoy usamos <b style="color:var(--ink)">DeepSeek</b> a propósito — para demostrar en vivo por qué sirvió haber encapsulado la llamada al modelo.</p>
+      <div class="codeblock">
+<span class="c"># Mismo SDK de OpenAI, solo cambia el destino</span><br>
+<span class="k">from</span> openai <span class="k">import</span> OpenAI<br><br>
+client = OpenAI(<br>
+&nbsp;&nbsp;api_key=DEEPSEEK_API_KEY,<br>
+&nbsp;&nbsp;base_url=<span class="s">"https://api.deepseek.com"</span><br>
+)
+      </div>
+      <div class="flagbox" style="border-color:var(--accent-2);background:var(--accent-soft);">
+        <span class="dot" style="background:var(--accent-2);"></span>
+        <p><b style="color:var(--accent-2);">Lo que sí cambia:</b>&nbsp;DeepSeek no fuerza el JSON Schema tan estrictamente como el <code class="tag">strict=True</code> de OpenAI — usa <code class="tag">response_format={"type": "json_object"}</code>. Por eso hoy agregamos una <b>validación explícita con Pydantic</b> después de la llamada, con reintento si falla. No es un parche: es la misma lección de ayer, un nivel más abajo — nunca confiar ciegamente en lo que devuelve el modelo.</p>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Nota técnica</span></footer>
+  </section>
+
+  <!-- 8. Roadmap notebook -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Notebook de hoy · Google Colab</div>
+      <h2>Siete pasos, un solo prototipo funcionando<a class="mk" href="https://github.com/manuelarguelles/ai-engineer-challenge-dia2" target="_blank" rel="noopener" title="Repo del taller">★</a></h2>
+      <div class="roadmap">
+        <div class="rm-row"><span class="rm-n">1</span><div><h4>Conectar información propia</h4><p>Una base de datos real de sistemas críticos — se consulta antes de clasificar, no se le pide al modelo que la adivine.</p></div></div>
+        <div class="rm-row"><span class="rm-n">2</span><div><h4>Retomar el contrato</h4><p>Mismo <code class="tag">AnalisisIncidente</code> de ayer, ahora contra DeepSeek — validado con Pydantic.</p></div></div>
+        <div class="rm-row"><span class="rm-n">3</span><div><h4>Cerrar el pendiente de ayer</h4><p>Correr el dataset de casos como eval determinista: ¿el contrato sigue sosteniéndose?</p></div></div>
+        <div class="rm-row"><span class="rm-n">4</span><div><h4>Definir la herramienta</h4><p>Una función real que el sistema puede ejecutar: crear un ticket en GitHub según categoría y prioridad.</p></div></div>
+        <div class="rm-row"><span class="rm-n">5</span><div><h4>Conectar tool calling</h4><p>El modelo propone qué herramienta usar y con qué datos — la aplicación decide si la ejecuta.</p></div></div>
+        <div class="rm-row"><span class="rm-n">6</span><div><h4>Gate humano-en-el-medio</h4><p><code class="tag">requiere_revision_humana</code> pasa de campo informativo a bloqueo real antes de ejecutar.</p></div></div>
+        <div class="rm-row"><span class="rm-n">7</span><div><h4>Prototipo end-to-end</h4><p>Incidente → dato propio → clasificación validada → decisión de acción → ejecución o pausa para revisión.</p></div></div>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Roadmap</span></footer>
+  </section>
+
+  <!-- 9. Cierre -->
+  <section class="slide">
+    <div class="inner with-qr">
+      <div>
+        <div class="eyebrow">Para cerrar</div>
+        <h2>El notebook queda como material</h2>
+        <p class="lead">Al final de la sesión les dejo el Colab ejecutable tal cual — mismo caso, mismo contrato, ahora actuando.</p>
+        <p class="anchor">Entender fue el primer paso. Actuar con control es el segundo.</p>
+      </div>
+      <div class="qr-card">
+        <img src="qr-linkedin.png" alt="QR LinkedIn Manuel Argüelles">
+        <div class="cap">Dudas, feedback, proyectos →</div>
+        <div class="cap" style="margin-top:6px;">github.com/manuelarguelles/ai-engineer-challenge-dia2</div>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Cierre</span></footer>
+  </section>
+
+</div>
+
+<div class="navdots" id="navdots"></div>
+<div class="counter" id="counter">1 / 13</div>
+<div class="hint">← → para navegar</div>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      background: '#0b0f1f',
+      primaryColor: '#181f42',
+      primaryTextColor: '#eef0fa',
+      primaryBorderColor: '#9333ea',
+      lineColor: '#4c6fff',
+      secondaryColor: '#241a49',
+      tertiaryColor: '#121834',
+      fontFamily: 'IBM Plex Sans, sans-serif',
+      fontSize: '13px'
+    },
+    flowchart: {
+      nodeSpacing: 18,
+      rankSpacing: 34,
+      padding: 8,
+      htmlLabels: true
+    }
+  });
+</script>
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  var idx = 0;
+  var dotsWrap = document.getElementById('navdots');
+  var counter = document.getElementById('counter');
+
+  for (var i=0;i<total;i++){
+    var b = document.createElement('button');
+    b.dataset.i = i;
+    if(i===0) b.className='active';
+    b.addEventListener('click', function(){ go(parseInt(this.dataset.i,10)); });
+    dotsWrap.appendChild(b);
+  }
+  var dots = dotsWrap.querySelectorAll('button');
+
+  function go(n){
+    if(n<0) n=0;
+    if(n>total-1) n=total-1;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = n;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    counter.textContent = (idx+1) + ' / ' + total;
+    try{ localStorage.setItem('dia2-slide', idx); }catch(e){}
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight' || e.key===' ' || e.key==='PageDown'){ go(idx+1); e.preventDefault(); }
+    if(e.key==='ArrowLeft' || e.key==='PageUp'){ go(idx-1); e.preventDefault(); }
+    if(e.key==='Home'){ go(0); }
+    if(e.key==='End'){ go(total-1); }
+  });
+
+  var startX = null;
+  document.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    if(startX===null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx) > 60){ go(dx < 0 ? idx+1 : idx-1); }
+    startX = null;
+  });
+
+  try{
+    var saved = localStorage.getItem('dia2-slide');
+    if(saved !== null) go(parseInt(saved,10));
+  }catch(e){}
+})();
+
+// ---------- Tema claro/oscuro ----------
+(function(){
+  var bTema = document.getElementById('bTema');
+  function aplicarTema(tema){
+    document.body.classList.toggle('tema-claro', tema === 'claro');
+    bTema.setAttribute('aria-pressed', tema === 'claro' ? 'true' : 'false');
+    bTema.textContent = tema === 'claro' ? '☀ Tema' : '☾ Tema';
+  }
+  var temaGuardado = 'oscuro';
+  try{ temaGuardado = localStorage.getItem('dia2-tema') || 'oscuro'; }catch(e){}
+  aplicarTema(temaGuardado);
+
+  bTema.addEventListener('click', function(){
+    var actual = document.body.classList.contains('tema-claro') ? 'claro' : 'oscuro';
+    var siguiente = actual === 'claro' ? 'oscuro' : 'claro';
+    aplicarTema(siguiente);
+    try{ localStorage.setItem('dia2-tema', siguiente); }catch(e){}
+  });
+})();
+
+// ---------- Escala tipográfica (persistida) ----------
+(function(){
+  var baseFont = 100; // 100% = tamaño original del deck
+  var deckEscala = 100;
+  try{ deckEscala = parseInt(localStorage.getItem('dia2-escala'), 10) || baseFont; }catch(e){}
+
+  function aplicarEscala(valor){
+    deckEscala = Math.max(80, Math.min(140, valor));
+    // La mayoría de los tamaños del deck son clamp(px, vw, px), no rem —
+    // cambiar el font-size del <html> no los movería. "zoom" sí escala
+    // unidades absolutas; es no estándar pero funciona en Chrome/Edge,
+    // que es lo que se usa para presentar.
+    document.documentElement.style.fontSize = deckEscala + '%';
+    var factor = deckEscala / 100;
+    var deckEl = document.getElementById('deck');
+    deckEl.style.zoom = factor;
+    // "zoom" agranda la caja además del contenido: si #deck mide 100vw/100dvh,
+    // al escalar se vuelve más grande que la pantalla y lo que está pegado al
+    // borde derecho (footer, contador, puntos de navegación) queda cortado.
+    // Compensamos el tamaño declarado para que, tras el zoom, siga llenando
+    // exactamente el viewport sin desbordar.
+    deckEl.style.width = (100 / factor) + 'vw';
+    deckEl.style.height = (100 / factor) + 'dvh';
+    try{ localStorage.setItem('dia2-escala', deckEscala); }catch(e){}
+  }
+  aplicarEscala(deckEscala);
+
+  document.getElementById('bMenos').addEventListener('click', function(){ aplicarEscala(deckEscala - 10); });
+  document.getElementById('bMas').addEventListener('click', function(){ aplicarEscala(deckEscala + 10); });
+})();
+
+// ---------- Panel de referencias (★) ----------
+(function(){
+  var panel = document.getElementById('refsPanel');
+  var bMarcas = document.getElementById('bMarcas');
+  var bClose = document.getElementById('refsClose');
+
+  function abrir(){
+    panel.classList.add('open');
+    bMarcas.setAttribute('aria-expanded', 'true');
+  }
+  function cerrar(){
+    panel.classList.remove('open');
+    bMarcas.setAttribute('aria-expanded', 'false');
+  }
+  bMarcas.addEventListener('click', function(){
+    panel.classList.contains('open') ? cerrar() : abrir();
+  });
+  bClose.addEventListener('click', cerrar);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && panel.classList.contains('open')) cerrar();
+  });
+})();
+
+// ---------- Auditoría de overflow/centrado (gate ejecutable) ----------
+function deckAudit(){
+  var problemas = [];
+  document.querySelectorAll('.slide').forEach(function(slide, i){
+    if(slide.scrollWidth > slide.clientWidth + 2){
+      problemas.push('Slide ' + (i + 1) + ': overflow horizontal (' + slide.scrollWidth + 'px > ' + slide.clientWidth + 'px)');
+    }
+    var inner = slide.querySelector('.inner');
+    if(inner && inner.scrollHeight > slide.clientHeight){
+      problemas.push('Slide ' + (i + 1) + ': el contenido excede el alto visible (revisar en pantalla chica)');
+    }
+  });
+  if(problemas.length){
+    console.warn('[deckAudit] problemas encontrados:\\n' + problemas.join('\\n'));
+  } else {
+    console.log('[deckAudit] sin overflow detectado en ' + document.querySelectorAll('.slide').length + ' slides');
+  }
+  return problemas;
+}
+window.addEventListener('load', function(){ setTimeout(deckAudit, 300); });
+</script>
+</body>
+</html>
