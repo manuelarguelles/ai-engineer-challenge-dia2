@@ -31,6 +31,7 @@
     <li><a href="https://langchain-ai.github.io/langgraph/" target="_blank" rel="noopener">LangGraph — routing de agentes</a></li>
     <li><a href="https://mermaid.js.org/" target="_blank" rel="noopener">Mermaid — diagramas como código</a></li>
     <li><a href="https://github.com/manuelarguelles/ai-engineer-challenge-dia2" target="_blank" rel="noopener">Repo del taller — notebook y slides de Día 2</a></li>
+    <li><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">Anthropic — Building effective agents</a></li>
   </ul>
 </aside>
 
@@ -308,6 +309,74 @@ client = OpenAI(<br>
       <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Roadmap</span></footer>
   </section>
 
+  <!-- 8b. Extra: patrones de solución con IA -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Extra · Fuera del caso de hoy</div>
+      <h2>La solución depende de quién decide los pasos<a class="mk" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener" title="Anthropic — Building effective agents">★</a></h2>
+      <p class="lead" style="max-width:70ch;">No todo problema con IA necesita un agente. Antes de elegir arquitectura, conviene ubicar la solución en esta escala — de menos a más autonomía del modelo:</p>
+      <div class="grid2">
+        <div class="card">
+          <span class="num">Chatbot</span>
+          <h3>Responde y conversa</h3>
+          <p>La persona conduce todo el recorrido; el modelo solo contesta lo que se le pregunta.</p>
+          <div class="why"><b>Sirve para:</b>&nbsp;explorar y responder dudas, no para ejecutar acciones por su cuenta.</div>
+        </div>
+        <div class="card">
+          <span class="num">Workflow / pipeline</span>
+          <h3>Ejecuta etapas fijas</h3>
+          <p>La secuencia de pasos la define la aplicación de antemano — el modelo puede aparecer en un paso, pero no elige la ruta.</p>
+          <div class="why"><b>Sirve para:</b>&nbsp;procesos ya conocidos donde la predictibilidad importa más que la flexibilidad.</div>
+        </div>
+        <div class="card">
+          <span class="num">Copiloto</span>
+          <h3>Propone, la persona decide</h3>
+          <p>El modelo trabaja y sugiere; hay revisión humana en los puntos clave antes de confirmar.</p>
+          <div class="why"><b>Sirve para:</b>&nbsp;balancear velocidad y control cuando el costo de un error es alto.</div>
+        </div>
+        <div class="card">
+          <span class="num">Agente con herramientas</span>
+          <h3>Elige y adapta el recorrido</h3>
+          <p>El modelo decide qué acción tomar según los resultados que va obteniendo, no una ruta fija.</p>
+          <div class="why"><b>Sirve para:</b>&nbsp;es lo que armaron hoy — clasificar, decidir y ejecutar sobre el mismo caso.</div>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:22px;">El prototipo de hoy es el último patrón — y por eso necesitó más controles (validación, política determinista, gate humano) que los otros tres.</p>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Extra · Patrones</span></footer>
+  </section>
+
+  <!-- 8c. Extra: capas de un agente -->
+  <section class="slide">
+    <div class="inner">
+      <div class="eyebrow">Extra · Modelo mental para cualquier agente</div>
+      <h2>Un agente se reduce a percibir, decidir y actuar<a class="mk" href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener" title="Anthropic — Building effective agents">★</a></h2>
+      <p class="lead" style="max-width:70ch;">Sin importar la plataforma, tres piezas se repiten en cualquier agente: un <b style="color:var(--ink)">agente</b> que elige acciones según una meta, una <b style="color:var(--ink)">tool</b> —una operación con nombre, entradas, salida y permisos— y un <b style="color:var(--ink)">estado</b> con los mensajes y resultados disponibles en ese recorrido.</p>
+      <div class="grid3">
+        <div class="card">
+          <span class="num">Percibir</span>
+          <h3>Leer el contexto</h3>
+          <p>La petición, el historial de la conversación y lo que devolvieron las tools hasta ahora.</p>
+        </div>
+        <div class="card">
+          <span class="num">Decidir</span>
+          <h3>Elegir la acción</h3>
+          <p>Qué tool usar y con qué argumentos — o si ya hay evidencia suficiente para responder directo.</p>
+        </div>
+        <div class="card">
+          <span class="num">Actuar</span>
+          <h3>Ejecutar y observar</h3>
+          <p>El código ejecuta la acción (nunca el modelo directamente); el resultado vuelve a alimentar el ciclo.</p>
+        </div>
+      </div>
+      <div class="flagbox">
+        <span class="dot"></span>
+        <p><b>Workflow vs. agente, la distinción de fondo:</b>&nbsp;en un workflow la aplicación fija la secuencia de antemano; en un agente, el modelo elige entre las herramientas permitidas. El prototipo de hoy es un agente acotado — decide qué hacer, pero dentro de un límite que ustedes programaron: el gate humano-en-el-medio.</p>
+      </div>
+    </div>
+      <footer class="foot"><span>AI Engineer Challenge · Día 2</span><span>Extra · Capas</span></footer>
+  </section>
+
   <!-- 9. Cierre -->
   <section class="slide">
     <div class="inner with-qr">
@@ -329,7 +398,7 @@ client = OpenAI(<br>
 </div>
 
 <div class="navdots" id="navdots"></div>
-<div class="counter" id="counter">1 / 13</div>
+<div class="counter" id="counter">1 / 15</div>
 <div class="hint">← → para navegar</div>
 
 <script>
